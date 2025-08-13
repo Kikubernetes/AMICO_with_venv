@@ -17,7 +17,6 @@ from dipy.core.gradients import gradient_table
 import dipy.reconst.dti as dti
 from amico.util import PRINT, LOG, WARNING, ERROR, get_verbose
 from dicelib.ui import ProgressBar
-from pkg_resources import get_distribution
 from threadpoolctl import ThreadpoolController
 
 def setup( lmax=12 ) :
@@ -74,7 +73,8 @@ class Evaluation :
 
         # store all the parameters of an evaluation with AMICO
         self.CONFIG = {}
-        self.set_config('version', get_distribution('dmri-amico').version)
+        from . import __version__ as version
+        self.set_config('version', version)
         self.set_config('study_path', study_path)
         self.set_config('subject', subject)
         self.set_config('DATA_path', pjoin( study_path, subject ))
@@ -312,7 +312,7 @@ class Evaluation :
         """
         if self.model is None :
             ERROR( 'Model not set; call "set_model()" method first' )
-        
+
         solver_params = list(inspect.signature(self.model.set_solver).parameters)
         params_new = {}
         for key in params.keys():
@@ -344,7 +344,7 @@ class Evaluation :
             ERROR( 'Model not set; call "set_model()" method first' )
         if not is_valid(ndirs):
             ERROR( 'Unsupported value for ndirs.\nNote: Supported values for ndirs are [1, 500 (default), 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500, 10000, 32761]' )
-        
+
         self.BLAS_nthreads = self.get_config('BLAS_nthreads') if self.get_config('BLAS_nthreads') > 0 else cpu_count() if self.get_config('BLAS_nthreads') == -1 else ERROR('Number of BLAS threads must be positive or -1')
 
         # store some values for later use
@@ -385,7 +385,7 @@ class Evaluation :
             ERROR( 'Model not set; call "set_model()" method first' )
         if self.scheme is None :
             ERROR( 'Scheme not loaded; call "load_data()" first' )
-        
+
         self.BLAS_nthreads = self.get_config('BLAS_nthreads') if self.get_config('BLAS_nthreads') > 0 else cpu_count() if self.get_config('BLAS_nthreads') == -1 else ERROR('Number of BLAS threads must be positive or -1')
 
         tic = time.time()
@@ -418,7 +418,7 @@ class Evaluation :
             ERROR( 'Response functions were not created with the same model' )
         if self.get_config('DTI_fit_method') not in ['OLS', 'LS', 'WLS', 'NLLS', 'RT', 'RESTORE', 'restore']:
             ERROR("DTI fit method must be one of the following:\n'OLS'(default) or 'LS': ordinary least squares\n'WLS': weighted least squares\n'NLLS': non-linear least squares\n'RT' or 'RESTORE' or 'restore': robust tensor\nNOTE: more info at https://dipy.org/documentation/1.6.0./reference/dipy.reconst/#dipy.reconst.dti.TensorModel")
-        
+
         self.nthreads = self.get_config('nthreads') if self.get_config('nthreads') > 0 else cpu_count() if self.get_config('nthreads') == -1 else ERROR('Number of parallel threads must be positive or -1')
         self.BLAS_nthreads = self.get_config('BLAS_nthreads') if self.get_config('BLAS_nthreads') > 0 else cpu_count() if self.get_config('BLAS_nthreads') == -1 else ERROR('Number of BLAS threads must be positive or -1')
 
