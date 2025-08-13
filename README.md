@@ -13,7 +13,7 @@
 [![Static Badge](https://img.shields.io/badge/Follow_%40daducci-white?logo=github&logoColor=%23363D45)](https://github.com/daducci)
 [![Static Badge](https://img.shields.io/badge/Follow_%40ADaducci-white?logo=twitter)](https://twitter.com/ADaducci)
 
-### Implementation of the linear framework for Accelerated Microstructure Imaging via Convex Optimization (AMICO) described in [Daducci, Alessandro, et al. 2015](https://doi.org/10.1016/j.neuroimage.2014.10.026)
+### Implementation of the linear framework for Accelerated Microstructure Imaging via Convex Optimization (AMICO) described in [(Daducci et al., 2015)](https://doi.org/10.1016/j.neuroimage.2014.10.026)
 
 ## Documentation
 The documentation, including the [installation guide](https://github.com/daducci/AMICO/wiki/How-to-install-AMICO) as well as a series of demos/tutorials to show how to use AMICO to fit different models to your data, can be found in the [wiki](https://github.com/daducci/AMICO/wiki).
