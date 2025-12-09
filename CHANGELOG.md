@@ -1,6 +1,13 @@
 # Change Log
 ### All notable changes to `AMICO` will be documented in this file.
 
+## `v2.1.1`<br>_2025-08-13_
+### 🐛Fixed
+- `UserWarning`: `pkg_resources` is deprecated as an API.
+
+---
+---
+
 ## `v2.1.0`<br>_2025-01-20_
 ### 🛠️Changed
 - Support for `numpy>=2.0.0`
