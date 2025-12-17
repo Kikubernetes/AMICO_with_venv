@@ -1,9 +1,10 @@
 # Change Log
 ### All notable changes to `AMICO` will be documented in this file.
 
-## `v2.1.1`<br>_2025-08-13_
+## `v2.1.1`<br>_2025-12-17_
 ### 🐛Fixed
 - `UserWarning`: `pkg_resources` is deprecated as an API.
+- Ensure the input mask is binary
 
 ---
 ---
