@@ -1,4 +1,7 @@
 # AMICO - Accelerated Microstructure Imaging via Convex Optimization
+
+English | [日本語](README.ja.md)
+
 [![PyPI](https://img.shields.io/pypi/v/dmri-amico?label=PyPI&labelColor=%23363D45)](https://pypi.org/project/dmri-amico)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/dmri-amico?label=Downloads&labelColor=%23363D45)
 [![PyPI - License](https://img.shields.io/pypi/l/dmri-amico?label=License&labelColor=%23363D45)](https://github.com/daducci/AMICO/blob/master/LICENSE)
