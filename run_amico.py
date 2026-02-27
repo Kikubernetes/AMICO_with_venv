@@ -9,11 +9,11 @@ import amico
 amico.setup()
 
 ae = amico.Evaluation()
-# -1はスレッド数を使用可能な全てのコアに設定。環境に合わせて変更可能。
-ae.set_config('BLAS_nthreads', -1)
+ae.set_config('nthreads', 4)
+ae.set_config('BLAS_nthreads', 1)
 # 信号のデバイアスを有効にする。これにより、SNRが低い場合のフィッティング精度が向上すると考えられる。
-ae.set_config('doDebiasSignal', True)
-ae.set_config('DWI-SNR', 30.0)
+# ae.set_config('doDebiasSignal', True)
+# ae.set_config('DWI-SNR', 30.0)
 ae.set_config('doSaveModulatedMaps', True)
 
 amico.util.fsl2scheme('bvals', 'bvecs')
