@@ -11,12 +11,9 @@ amico.setup()
 ae = amico.Evaluation()
 ae.set_config('nthreads', 4)
 ae.set_config('BLAS_nthreads', 1)
-
 # 信号のデバイアスを有効にする。これにより、SNRが低い場合のフィッティング精度が向上すると考えられる。
-# うまく行かない場合は以下の2行をコメントアウト
-ae.set_config('doDebiasSignal', True)
-ae.set_config('DWI-SNR', 30.0)
-
+# ae.set_config('doDebiasSignal', True)
+# ae.set_config('DWI-SNR', 30.0)
 ae.set_config('doSaveModulatedMaps', True)
 
 amico.util.fsl2scheme('bvals', 'bvecs')

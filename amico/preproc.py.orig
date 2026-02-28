@@ -22,7 +22,6 @@ def der_Diff(E0,Signal,sigma_diff):
 
 def debiasRician(DWI,SNR,mask,scheme):
     debiased_DWI = np.zeros(DWI.shape)
-    eps = 1e-8
     with ProgressBar(total=mask.sum(), disable=get_verbose()<3) as pbar:
         for ix in range(DWI.shape[0]):
             for iy in range(DWI.shape[1]):
@@ -30,7 +29,6 @@ def debiasRician(DWI,SNR,mask,scheme):
                     if mask[ix,iy,iz]:
                         b0 = DWI[ix,iy,iz,scheme.b0_idx].mean()
                         sigma_diff = b0/SNR
-                        sigma_diff = max(float(sigma_diff), eps)
                         init_guess = DWI[ix,iy,iz,:].copy()
                         tmp = minimize(F_norm_Diff_K, init_guess, args=(init_guess,sigma_diff), method = 'L-BFGS-B', jac=der_Diff)
                         debiased_DWI[ix,iy,iz] = tmp.x
