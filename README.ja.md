@@ -38,6 +38,8 @@ NODDI などの拡散MRIマイクロ構造モデルを**高速かつ安定的に
 
 以下は最もシンプルな実行方法
 
+**note**: path/to/・・・という記載は実際のパスに置き換えてください
+
 ### 0. このリポジトリをクローン
 
 ```bash
@@ -48,7 +50,9 @@ git clone https://github.com/Kikubernetes/AMICO_with_venv.git
 
 #### venv環境作成
 
-自分が環境を作成したいところに移動（データのある場所、もしくは専用フォルダを作成する等）
+直接pip installも可能だが、他のソフトとパッケージのバージョンが競合する場合がある
+一度作成した環境で安定して実行したい場合にはvenv環境作成がおすすめ  
+自分が環境を作成したいところに移動（データのある場所、もしくはvenv専用フォルダ等）して以下を実行
 
 ```bash
  python3 -m venv amico
@@ -56,11 +60,16 @@ git clone https://github.com/Kikubernetes/AMICO_with_venv.git
  python3 -m pip install --upgrade pip
  pip install dmri-amico
 ```
+これで必要なパッケージはインストールできた
+
+**note**: 仮想環境をアクティベートするには　`source path/to/仮想環境名/bin/activate`  
+      仮想環境を終了するには　`deactivate`  
+      いらなくなったら環境ごと削除できる
 
 ### 2. データを用意
 
-noddi_dirを準備する。  
-ディレクトリ構造は以下のようにする。
+noddi_dirを準備  
+ディレクトリ構造は以下のようにする
 
 ```bash
 sub01
@@ -76,19 +85,20 @@ sub02
 　・・・
 ```
 
-これらのファイルをHCPpipelines Diffusion Preprocessing Pipelineから取得する場合は、Diffusionディレクトリ下（Diffusion空間）、もしくはT1w/Diffusion下（T1w空間）にある。  
-* nodif_brain_maskはb0画像から作成したバイナリマスク
-* 持っていない場合は以下のようなコマンドで作成できる  
+* これらのファイルをHCPpipelines Diffusion Preprocessing Pipelineから取得する場合は、Diffusionディレクトリ下（Diffusion空間）、もしくはT1w/Diffusion下（T1w空間）からコピー  
+* nodif_brain_maskはb0画像から作成したバイナリマスク  
+ 持っていない場合は以下のようなコマンドで作成できる  
 
-注意：data.nii.gzの1ボリューム目がb0と仮定、要FSL
+**note**：data.nii.gzの1ボリューム目がb0と仮定、要FSL
 ```bash
 fslroi data.nii.gz b0.nii.gz 0 1
 bet b0.nii.gz nodif_brain -f 0.3 -R -m
 ```
 
-[Synthstrip](https://surfer.nmr.mgh.harvard.edu/docs/synthstrip/) が使用可能ならそちらもおすすめ
+[Synthstrip](https://surfer.nmr.mgh.harvard.edu/docs/synthstrip/) が使用可能なら、betの代わりに以下も可能
 ```bash
-mri_synthstrip -i nodif.nii.gz -o nodif_brain.nii.gz -m nodif_brain_mask.nii.gz --no-csf
+fslroi data.nii.gz b0.nii.gz 0 1
+mri_synthstrip -i b0.nii.gz -o nodif_brain.nii.gz -m nodif_brain_mask.nii.gz
 ```
 
 ### 3. （オプション）必要に応じてb値を丸める
@@ -102,12 +112,12 @@ b0が認識されないとエラーになるので、b値を丸める必要が�
     995, 990, 1005 etc. ⇨ 1000
 ```
 
-マニュアルでも作成可能だが、ここではround_bvals.pyを使用  
+マニュアルでも作成可能だが、大変なので丸め用スクリプトround_bvals.pyを用意した  
 使い方は以下の通り
 
 ```bash
 # 元のファイルは bvals.orig, 丸めたあとのファイル名は bvalsとする
-# b値が0,1500,3000で設計されており、50以下の違いを丸める場合の例を示す
+# 以下にb値が0,1500,3000で設計されており、50以下の違いを丸める場合の例を示す
 
 mv bvals bvals.orig
 cp path/to/AMICO_with_venv/round_bvals.py . # 実際のパスに置き換える
@@ -128,12 +138,12 @@ cp path/to/AMICO_with_venv/run_amico.py . # 実際のパスに置き換える
 ```
 - 必要に応じて仮想環境をアクティベート
 ```bash
-source amico/bin/activate # 実際のパスに置き換える
+source path/to/amico/bin/activate # 実際のパスに置き換える
 ```
 
 - 実行
 ```bash
-python run_amico.py
+python3 run_amico.py
 ```
 出力先は `sub01/AMICO/NODDI` になる
 
@@ -179,7 +189,7 @@ run_amico.pyの17-18行目をコメントアウトする
 #### 2の場合  
 使用しているパッケージの場所を確認する
 ```
-python -c "import amico, inspect; print(amico.__file__)"
+python3 -c "import amico, inspect; print(amico.__file__)"
 ```
 ここで出てくる`.../site-packages/...`内にpreproc.pyがあるので、
 ```
@@ -188,8 +198,13 @@ mv preproc.py preproc.py.orig
 として保存しておく。その上でこのレポジトリ内にあるpreproc.pyを同じ場所におく  
 （0での除算を防ぐために下限値を設けてある）
 
-
 ---
+
+**note**: メモリに余裕がある場合は環境に応じてrun_amico.pyにあるnthreadsを増加可能
+（環境によるが、一例としてnthreads=2 26GB； nthreads=4 40GBくらい必要）
+fitting部分のみなので全体の処理時間はあまり変わらない
+
+
 
 ## 参考文献
 

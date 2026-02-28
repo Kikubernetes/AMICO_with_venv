@@ -35,7 +35,7 @@ for dir in "$noddi_dir"/*/; do
         echo "Processing directory: $dir"
         # Run the AMICO script with the virtual environment's Python
         cd "$dir"
-        python run_amico.py
+        python "$script_dir"/run_amico.py
     else
         echo "Skipping non-directory: $dir"
     fi

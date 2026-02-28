@@ -1,3 +1,10 @@
+from pathlib import Path
+import sys
+
+# Prefer the installed dmri-amico package in the venv over the local source tree.
+script_dir = Path(__file__).resolve().parent
+sys.path = [p for p in sys.path if Path(p or ".").resolve() != script_dir]
+
 import amico
 amico.setup()
 
